@@ -108,7 +108,11 @@ linkedin:
     (1) RSS feeds for verified employer Jobs pages (owner adds manually).
     (2) Daily prompt asking owner to manually check "Posted in last 24 hours" filter.
     (3) Manual alumni/recruiter discovery for referrals.
-  rss_feeds: []
+  rss_feeds:
+    - "https://remoteok.com/remote-ai-jobs.rss"
+    - "https://remoteok.com/remote-python-jobs.rss"
+    - "https://remoteok.com/remote-engineer-jobs.rss"
+    - "https://weworkremotely.com/categories/remote-programming-jobs.rss"
   manual_check_prompts_daily: true
   manual_check_searches:
     # Targeted at startups — uses "Posted in last 24 hours" + size filter for <500 employees.

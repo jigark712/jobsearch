@@ -18,6 +18,10 @@ SOURCE_PRIORITY = {
     "jobright": 50,
     "twitter": 30,
     "linkedin_rss": 40,
+    "remoteok": 55,
+    "weworkremotely": 55,
+    "rss": 40,
+    "hn_whos_hiring": 65,
 }
 
 

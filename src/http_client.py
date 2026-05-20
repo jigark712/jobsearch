@@ -20,7 +20,9 @@ BROWSER_HEADERS = {
     "User-Agent": BROWSER_UA,
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
+    # NB: deliberately not requesting 'br' (brotli) — httpx core doesn't decompress
+    # it without the optional 'brotli' package, and we don't want the extra dep.
+    "Accept-Encoding": "gzip, deflate",
 }
 
 _host_locks: dict[str, Lock] = defaultdict(Lock)
