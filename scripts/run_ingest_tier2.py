@@ -7,7 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.dedupe import dedupe
-from src.ingest import handshake, hn_whos_hiring, jobright, linkedin_rss
+from src.ingest import handshake, hn_whos_hiring, jobright, linkedin_rss, otta
 from src.logging_setup import configure_logging
 from src.storage import append_postings
 
@@ -18,6 +18,7 @@ def main() -> int:
     all_postings = []
     for name, fn in (("jobright", jobright.fetch_all),
                      ("handshake", handshake.fetch_all),
+                     ("otta", otta.fetch_all),
                      ("linkedin_rss", linkedin_rss.fetch_all),
                      ("hn_whos_hiring", hn_whos_hiring.fetch_all)):
         log.info("ingesting", extra={"source": name})

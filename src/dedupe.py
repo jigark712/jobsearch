@@ -22,6 +22,7 @@ SOURCE_PRIORITY = {
     "weworkremotely": 55,
     "rss": 40,
     "hn_whos_hiring": 65,
+    "otta": 55,
 }
 
 
