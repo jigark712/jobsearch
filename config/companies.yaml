@@ -3,23 +3,71 @@
 # Lever:       https://jobs.lever.co/<slug>
 # Ashby:       https://jobs.ashbyhq.com/<slug>
 ats_feeds:
+  # Focused on AI startups (Series A–C) and dev-tools companies that hire new grads
+  # and sponsor F-1. Big tech is NOT here — owner targets startups.
   greenhouse:
-    - "anthropic"
-    - "stripe"
-    - "databricks"
-    - "scaleai"          # Scale AI
-    # TODO(jigar): add ~150 priority companies
+    - "anthropic"            # Anthropic
+    - "databricks"           # Databricks (dev tools, sponsors)
+    - "stripe"               # Stripe (sponsors)
+    - "mongodb"              # MongoDB
+    - "datadog"              # Datadog (sponsors)
+    - "xai"                  # xAI
+    - "scaleai"              # Scale AI
+    - "cloudflare"           # Cloudflare
+    - "cresta"               # Cresta (Series C agentic AI)
+    - "vercel"               # Vercel
+    - "appliedintuition"     # Applied Intuition (autonomy)
+    - "intercom"             # Intercom (Fin AI)
+    - "figureai"             # Figure AI (humanoid robotics)
+    - "snorkelai"            # Snorkel AI (data labeling)
+    - "eve"                  # Eve (legal AI)
+    - "runpod"               # RunPod (GPU infra)
+    - "labelbox"             # Labelbox
+    - "hypori"               # Hypori
+    - "warp"                 # Warp Terminal
+    - "regie"                # Regie AI
   lever:
-    # Note: many AI startups are on Ashby now, not Lever. Populate from owner list.
-    []
+    - "mistral"              # Mistral
+    - "outreach"             # Outreach (sales AI)
+    - "ramp"                 # Ramp
   ashby:
-    - "openai"
-    - "perplexity"
-    - "ramp"
-    # TODO(jigar): populate
-  workday:
-    # use cautiously, scrape gently
-    - {company: "nvidia", url: "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"}
+    - "openai"               # OpenAI
+    - "snowflake"            # Snowflake
+    - "harvey"               # Harvey (legal AI)
+    - "cohere"               # Cohere
+    - "elevenlabs"           # ElevenLabs (voice AI)
+    - "sierra"               # Sierra (Bret Taylor's AI co)
+    - "decagon"              # Decagon (customer support AI)
+    - "langchain"            # LangChain
+    - "cursor"               # Cursor (Anysphere)
+    - "replit"               # Replit
+    - "deepgram"             # Deepgram (speech AI)
+    - "baseten"              # Baseten (inference infra)
+    - "perplexity"           # Perplexity
+    - "writer"               # Writer (enterprise gen AI)
+    - "cognition"            # Cognition (Devin)
+    - "supabase"             # Supabase
+    - "cartesia"             # Cartesia (voice models)
+    - "braintrust"           # Braintrust (LLM eval)
+    - "modal"                # Modal (serverless GPUs)
+    - "ema"                  # Ema (AI employee)
+    - "exa"                  # Exa (search API)
+    - "vapi"                 # Vapi (voice AI)
+    - "physicalintelligence" # Physical Intelligence (robotics)
+    - "bland"                # Bland AI (voice)
+    - "browserbase"          # Browserbase (agent browsers)
+    - "langfuse"             # Langfuse (LLM observability)
+    - "pinecone"             # Pinecone (vector DB)
+    - "anyscale"             # Anyscale (Ray)
+    - "weaviate"             # Weaviate (vector DB)
+    - "lindy"                # Lindy (AI agents)
+    - "tamr"                 # Tamr (data unification)
+    - "ramp"                 # Ramp
+  workday: []
+    # Big tech (Google/Meta/Amazon/Microsoft/Apple/NVIDIA) deprioritized per owner:
+    # F-1 grad targeting startups, not FAANG. YC + Series A AI startups are the focus.
+    # If owner ever wants to re-add specific Workday tenants, format is:
+    #   - {company: "name", url: "https://{tenant}.wdN.myworkdayjobs.com/{site}"}
 
 external_aggregators:
   yc_jobs: "https://www.workatastartup.com/jobs"
@@ -63,10 +111,19 @@ linkedin:
   rss_feeds: []
   manual_check_prompts_daily: true
   manual_check_searches:
-    # TODO(jigar): paste LinkedIn search URLs you want surfaced daily
-    - {label: "AI Engineer · US · 24h", url: ""}
-    - {label: "Software Engineer New Grad · Remote · 24h", url: ""}
-    - {label: "Boston Intern Part-Time · 24h", url: ""}
+    # Targeted at startups — uses "Posted in last 24 hours" + size filter for <500 employees.
+    # f_C = company filter, f_E = experience level (1=intern, 2=entry, 3=associate)
+    # f_TPR = time posted (r86400 = 24h), f_WT = workplace type
+    - {label: "AI Engineer · startup (<500) · 24h",
+       url: "https://www.linkedin.com/jobs/search/?keywords=AI%20Engineer&f_TPR=r86400&f_E=2&f_C=&f_CF=startup&location=United%20States"}
+    - {label: "ML Engineer · new grad · 24h",
+       url: "https://www.linkedin.com/jobs/search/?keywords=Machine%20Learning%20Engineer%20new%20grad&f_TPR=r86400&f_E=2&location=United%20States"}
+    - {label: "Founding Engineer · 24h",
+       url: "https://www.linkedin.com/jobs/search/?keywords=founding%20engineer&f_TPR=r86400&location=United%20States"}
+    - {label: "Forward Deployed Engineer · AI startups · 24h",
+       url: "https://www.linkedin.com/jobs/search/?keywords=forward%20deployed%20engineer&f_TPR=r86400&location=United%20States"}
+    - {label: "Boston · Software Intern part-time · 24h",
+       url: "https://www.linkedin.com/jobs/search/?keywords=software%20intern&f_TPR=r86400&f_E=1&location=Boston%2C%20Massachusetts%2C%20United%20States"}
 
 twitter_x:
   enabled: true
@@ -79,12 +136,46 @@ twitter_x:
     - "nitter.poast.org"
   watchlist_accounts:
     founders:
-      - "sama"
-      - "amasad"
-      - "skirano"
-      # TODO(jigar): grow to 30-40 founders of priority AI startups
-    recruiters: []  # TODO(jigar): named recruiters at priority companies
-    eng_leads: []   # TODO(jigar): eng leads who post about hiring
+      # AI labs / foundation models
+      - "sama"             # Sam Altman (OpenAI)
+      - "gdb"              # Greg Brockman (OpenAI)
+      - "dario_amodei"     # Dario Amodei (Anthropic)
+      - "elonmusk"         # Elon (xAI)
+      - "aidangomez"       # Aidan Gomez (Cohere)
+      - "arthurmensch"     # Arthur Mensch (Mistral)
+      - "AravSrinivas"     # Aravind Srinivas (Perplexity)
+      - "scott_wu"         # Scott Wu (Cognition / Devin)
+      # Dev tools / coding AI
+      - "amasad"           # Amjad Masad (Replit)
+      - "skirano"          # Pietro Schirano
+      - "mckaywrigley"     # Mckay Wrigley
+      - "rauchg"           # Guillermo Rauch (Vercel)
+      - "michaeltruell"    # Michael Truell (Cursor)
+      # Voice / agents
+      - "matsiwa"          # Matt from Vapi
+      - "kvogt"            # Kyle Vogt (formerly Cruise)
+      # Vertical AI
+      - "winston_weinberg" # Winston Weinberg (Harvey)
+      - "jesse_pollak"     # Jesse Pollak (Base)
+      - "lessin"           # Sam Lessin
+      # Robotics
+      - "adcock_brett"     # Brett Adcock (Figure)
+      - "chelseafinn"      # Chelsea Finn (Physical Intelligence)
+      # Infra / inference
+      - "akshat_b"         # Akshat (Modal)
+      - "amir_v_ali"       # Amir (Anyscale)
+      - "brandonduderstadt" # Brandon (Together)
+      # Boston/NE specific
+      - "hilarymason"      # Hilary Mason (Boston AI scene)
+    recruiters:
+      - "vinitb"           # Vinit Bharara (talent)
+      - "BeyangLiu"        # Beyang Liu (Sourcegraph eng)
+      - "patio11"          # Patrick McKenzie (startup recruiting commentary)
+    eng_leads:
+      - "swyx"             # Shawn Wang (Latent Space, AI eng community)
+      - "simonw"           # Simon Willison (AI engineering)
+      - "jeremyphoward"    # Jeremy Howard (fast.ai)
+      - "karpathy"         # Andrej Karpathy
   poll_frequency: "every 2 hours"
   freshness_priority: "high"
   daily_llm_call_cap: 200
