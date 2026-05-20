@@ -1,0 +1,228 @@
+{
+  "header": {
+    "name": "Jigar Kanakhara",
+    "links": {
+      "linkedin": "",
+      "github": "",
+      "portfolio": "https://jigark712.github.io",
+      "email": "jigar.work712@gmail.com",
+      "phone": "+1-857-919-8156"
+    }
+  },
+  "education": [
+    {
+      "school": "Boston University",
+      "degree": "Master of Science in Computer Science",
+      "start": "2025-09",
+      "end": "2026-12"
+    },
+    {
+      "school": "Indian Institute of Information Technology, Vadodara",
+      "degree": "Bachelor of Technology in Computer Science",
+      "start": "2021-12",
+      "end": "2025-05"
+    }
+  ],
+  "skills": {
+    "languages": ["Python", "TypeScript", "JavaScript", "SQL"],
+    "ai_ml": [
+      "PyTorch",
+      "Hugging Face Transformers",
+      "LLM agents",
+      "RAG",
+      "vector search",
+      "prompt engineering",
+      "model evaluation",
+      "VLMs",
+      "NLP",
+      "vLLM",
+      "NVIDIA NIM",
+      "Nemotron",
+      "NemoClaw"
+    ],
+    "backend": [
+      "FastAPI",
+      "Django REST Framework",
+      "Node.js",
+      "Express",
+      "async Python",
+      "REST APIs"
+    ],
+    "frontend": ["React", "TypeScript"],
+    "databases": [
+      "PostgreSQL",
+      "MongoDB",
+      "Supabase",
+      "SQLite",
+      "SQLModel",
+      "vector databases"
+    ],
+    "cloud_devops": [
+      "AWS",
+      "Docker",
+      "Git",
+      "GitHub Actions",
+      "CI/CD",
+      "Linux",
+      "HPC clusters"
+    ],
+    "apis_tools": ["GitHub REST API", "Hex API", "Supabase Realtime"]
+  },
+  "projects": [
+    {
+      "id": "hiveops",
+      "name": "HiveOps",
+      "url": "https://hiveops.us",
+      "stack": [
+        "React",
+        "TypeScript",
+        "FastAPI",
+        "async Python",
+        "Supabase",
+        "LLM agent orchestration",
+        "Hex API"
+      ],
+      "category": ["agentic_ai", "backend", "full_stack"],
+      "bullets": [
+        {
+          "id": "h1",
+          "text": "Shipped an agentic AI platform where specialized LLM agents collaborate on incident triage, root-cause analysis, remediation, and verification, with human-in-the-loop approval between steps.",
+          "tags": ["agentic_ai", "multi_agent", "human_in_loop"]
+        },
+        {
+          "id": "h2",
+          "text": "Built an async FastAPI backend that coordinates the agents and runs proposed fixes in a sandboxed simulation before applying them. Stored past incidents in Supabase and pulled relevant prior cases as context for each new incident, keeping agent prompts bounded.",
+          "tags": ["backend", "async", "memory_management", "rag"]
+        },
+        {
+          "id": "h3",
+          "text": "Built the React dashboard with sub-task tracking, audit logs, and live agent-state updates streamed via Supabase Realtime. Added an incident chat where the LLM has live access to the incident's current state.",
+          "tags": ["frontend", "real_time", "ui"]
+        }
+      ],
+      "extra_bullets_bank": [],
+      "credibility_anchor": "Won Best Use of Hex API at YHack Spring 2026"
+    },
+    {
+      "id": "prgenie",
+      "name": "PRGenie",
+      "url": "",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "GitHub REST API",
+        "SQLite",
+        "SQLModel",
+        "vLLM",
+        "Nemotron",
+        "NemoClaw",
+        "NVIDIA NIM"
+      ],
+      "category": ["agentic_ai", "developer_tools", "backend"],
+      "bullets": [
+        {
+          "id": "p1",
+          "text": "Built a GitHub-native AI agent that scores contributor trust, estimates change risk on incoming pull requests, suggests reviewers, and flags high-demand issues for maintainers to triage.",
+          "tags": ["agentic_ai", "developer_tools", "github"]
+        },
+        {
+          "id": "p2",
+          "text": "Built a seven-stage agent pipeline (trust scoring, risk analysis, triage, reviewer routing, persona extraction, review commenting, issue-demand detection) where each stage wrote its outputs to a shared SQLite store so later stages could read prior results without re-hitting the GitHub API.",
+          "tags": ["multi_agent", "pipeline", "caching"]
+        },
+        {
+          "id": "p3",
+          "text": "Integrated NemoClaw policy enforcement so every label, comment, and review action is checked against repository-level safety rules before execution.",
+          "tags": ["safety", "policy", "nvidia_nim"]
+        }
+      ],
+      "extra_bullets_bank": [],
+      "credibility_anchor": "Won Deep Tech track at Red Hat Open Accelerator Hackathon 2026"
+    },
+    {
+      "id": "foodgrid",
+      "name": "FoodGrid: Boston",
+      "url": "",
+      "stack": [
+        "React",
+        "TypeScript",
+        "Django REST Framework",
+        "Node.js",
+        "MongoDB Atlas",
+        "Llama 3.1"
+      ],
+      "category": ["full_stack", "applied_ai"],
+      "bullets": [
+        {
+          "id": "f1",
+          "text": "Built a civic web app with a 4-person team: a React map UI (Resident and Government modes, neighborhood-level metrics) backed by Django REST APIs serving census-tract GeoJSON, resource filters, and supply simulation endpoints.",
+          "tags": ["full_stack", "geospatial", "team_lead"]
+        },
+        {
+          "id": "f2",
+          "text": "Integrated a Node/Express chatbot grounded on the app's own data using Llama 3.1, with multilingual prompt handling so non-English-speaking residents could query the map in their language.",
+          "tags": ["applied_ai", "nlp", "multilingual"]
+        }
+      ],
+      "extra_bullets_bank": [],
+      "credibility_anchor": "Won Best Overall and Best EcoHack track at MLH Civic Hacks 2026"
+    }
+  ],
+  "work_experience": [
+    {
+      "id": "strategic_erp",
+      "company": "Strategic ERP, Ahmedabad",
+      "title": "SQL Developer",
+      "start": "2025-01",
+      "end": "2025-05",
+      "bullets": [
+        {
+          "id": "s1",
+          "text": "Built backend SQL queries and REST APIs for Real Estate CRM and HRMS modules, shipping features that were deployed to 4 enterprise clients.",
+          "tags": ["backend", "sql"]
+        },
+        {
+          "id": "s2",
+          "text": "Optimized SQL queries and backend APIs to improve throughput by 15% and cut page load time by 1.2s on the most-used flows.",
+          "tags": ["performance", "sql"]
+        },
+        {
+          "id": "s3",
+          "text": "Tracked down recurring data inconsistencies across 6 modules and fixed them at the source, reducing error tickets by roughly 25%.",
+          "tags": ["debugging", "data_quality"]
+        }
+      ]
+    },
+    {
+      "id": "iiit_research",
+      "company": "IIIT Vadodara, Gandhinagar",
+      "title": "Research Intern",
+      "start": "2024-05",
+      "end": "2024-08",
+      "bullets": [
+        {
+          "id": "r1",
+          "text": "Researched EV route planning under Dr. Naveen Kumar using a Fuzzy Genetic Algorithm to optimize charging-station selection along multi-stop long-distance routes.",
+          "tags": ["research", "optimization"]
+        },
+        {
+          "id": "r2",
+          "text": "Built the routing simulator in Python and benchmarked across 10 solution batches: 26% lower charging cost and 3% lower total trip time versus greedy baselines.",
+          "tags": ["python", "simulation", "benchmarking"]
+        },
+        {
+          "id": "r3",
+          "text": "Presented at CTSEM 2025, MANIT Bhopal; in press, Lecture Notes in Civil Engineering, Vol. 871, Springer Nature (July 2026).",
+          "tags": ["publication", "presentation"]
+        }
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "title": "Optimizing Transportation Cost in Long-Distance Electric Vehicle Using Fuzzy Genetic Algorithm",
+      "venue": "Lecture Notes in Civil Engineering, Vol. 871, Springer Nature",
+      "status": "in press (July 2026)"
+    }
+  ]
+}

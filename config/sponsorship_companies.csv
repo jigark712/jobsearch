@@ -1,0 +1,4 @@
+company,h1b_filings_last_year,source
+# Seed this from a USCIS H-1B LCA database export (e.g., myvisajobs.com).
+# Columns: company name (matched case-insensitive), filings in last 12 months, export source/date.
+# Used by scoring/sponsorship.py — see spec section 5 rubric component 12.

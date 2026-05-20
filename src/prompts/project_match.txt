@@ -1,0 +1,21 @@
+SYSTEM:
+You score how well the candidate's projects evidence the responsibilities listed in a job description. Output JSON only. Be conservative; a "strong" match means the project bullet directly proves the skill the JD asks for (not just adjacent vocabulary).
+
+USER (template — caller substitutes {jd_excerpt} and {projects_json}):
+JOB DESCRIPTION (top responsibilities):
+{jd_excerpt}
+
+CANDIDATE PROJECTS:
+{projects_json}
+
+Task: For each project, decide whether it is a "strong", "weak", or "none" match for the JD's top 3 responsibilities. Then return overall verdict.
+
+Output JSON exactly in this shape:
+{
+  "projects": [
+    {"name": "...", "match": "strong|weak|none", "reason": "one sentence"}
+  ],
+  "strong_count": <int>,
+  "weak_count": <int>,
+  "overall": "strong_2plus|strong_1|weak_only|none"
+}

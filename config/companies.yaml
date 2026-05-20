@@ -1,0 +1,97 @@
+# Tier 1 — primary ATS feeds. Owner-curated; add company slugs as found.
+# Greenhouse:  https://boards.greenhouse.io/<slug>
+# Lever:       https://jobs.lever.co/<slug>
+# Ashby:       https://jobs.ashbyhq.com/<slug>
+ats_feeds:
+  greenhouse:
+    - "anthropic"
+    - "stripe"
+    - "databricks"
+    - "scaleai"          # Scale AI
+    # TODO(jigar): add ~150 priority companies
+  lever:
+    # Note: many AI startups are on Ashby now, not Lever. Populate from owner list.
+    []
+  ashby:
+    - "openai"
+    - "perplexity"
+    - "ramp"
+    # TODO(jigar): populate
+  workday:
+    # use cautiously, scrape gently
+    - {company: "nvidia", url: "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"}
+
+external_aggregators:
+  yc_jobs: "https://www.workatastartup.com/jobs"
+  wellfound: "https://wellfound.com/jobs"
+  builtin_boston: "https://www.builtinboston.com/jobs"
+  jobright_ai:
+    enabled: true
+    note: |
+      Secondary source only. Aggregates Greenhouse/Lever/Ashby (which we already pull
+      directly). Pull daily, dedupe aggressively against Tier 1.
+    url: "https://jobright.ai"
+    auth: "requires logged-in session cookie (owner provides)"
+    session_cookie_path: ".secrets/jobright_session.txt"
+  simplify:
+    enabled: false
+    note: "Mostly stale or rewritten postings. Re-enable only if other sources dry up."
+  github_repos:
+    - "https://github.com/SimplifyJobs/New-Grad-Positions"
+    - "https://github.com/jobright-ai/2025-Software-Engineer-New-Grad"
+    - "https://github.com/SimplifyJobs/Summer2026-Internships"
+    # cvrve/Summer2026-Internships and speedyapply/2026-AI-ML-Internships in the
+    # original spec return 404. Owner can re-add if/when they find current repos.
+
+handshake:
+  enabled: true
+  note: |
+    Institution-locked. Access via owner's authenticated browser session, not API.
+    Owner exports a session cookie weekly; re-auth when scraper fails.
+  session_cookie_path: ".secrets/handshake_session.txt"
+  poll_frequency: "daily"
+  use_for: ["full_time", "fall_2026_internship"]
+
+linkedin:
+  do_not_scrape: true
+  note: |
+    LinkedIn cannot be scraped without risking owner's account.
+    Legitimate uses:
+    (1) RSS feeds for verified employer Jobs pages (owner adds manually).
+    (2) Daily prompt asking owner to manually check "Posted in last 24 hours" filter.
+    (3) Manual alumni/recruiter discovery for referrals.
+  rss_feeds: []
+  manual_check_prompts_daily: true
+  manual_check_searches:
+    # TODO(jigar): paste LinkedIn search URLs you want surfaced daily
+    - {label: "AI Engineer · US · 24h", url: ""}
+    - {label: "Software Engineer New Grad · Remote · 24h", url: ""}
+    - {label: "Boston Intern Part-Time · 24h", url: ""}
+
+twitter_x:
+  enabled: true
+  note: |
+    Founder / recruiter post watch via Nitter RSS. LLM classifies each tweet.
+    Cap LLM calls at 200/day. Apply -10 score penalty to Twitter-sourced postings.
+  nitter_instances:
+    - "nitter.net"
+    - "nitter.privacydev.net"
+    - "nitter.poast.org"
+  watchlist_accounts:
+    founders:
+      - "sama"
+      - "amasad"
+      - "skirano"
+      # TODO(jigar): grow to 30-40 founders of priority AI startups
+    recruiters: []  # TODO(jigar): named recruiters at priority companies
+    eng_leads: []   # TODO(jigar): eng leads who post about hiring
+  poll_frequency: "every 2 hours"
+  freshness_priority: "high"
+  daily_llm_call_cap: 200
+
+discord_slack_communities:
+  enabled: false
+  note: |
+    Many AI/ML hiring happens in private Discord/Slack communities. Owner monitors
+    these manually. System does NOT scrape (privacy/community trust). Owner pastes
+    interesting URLs into the Sunday email reply for the system to ingest.

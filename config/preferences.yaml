@@ -1,0 +1,201 @@
+owner:
+  name: "Jigar Kanakhara"
+  email: "jigar.work712@gmail.com"
+  phone: "+1-857-919-8156"
+  location_base: "Boston, MA"
+  graduation_date: "2026-12"
+  earliest_full_time_start: "2027-01"
+
+work_authorization:
+  status: "F-1"
+  cpt_eligibility: "available from start of fall 2026 semester (part-time only, Boston-based)"
+  opt_eligibility: "available after Dec 2026 graduation; STEM OPT extension eligible"
+  needs_h1b_future: true
+  auto_reject_no_sponsorship: true
+  auto_reject_clearance_required: true
+  auto_reject_us_citizen_only: true
+  summer_2026_internship_authorization:
+    type: "CPT (pre-completion)"
+    valid: true
+    constraint: "any US location OK for summer (full-time CPT)"
+    deadline: "must apply for CPT via BU ISSO 2-3 weeks before start date"
+
+active_tracks:
+  full_time: true
+  summer_2026_internship: true
+  fall_2026_internship: true
+
+track_priorities:
+  weights:
+    full_time: 0.7
+    summer_2026_internship: 0.2
+    fall_2026_internship: 0.1
+
+summer_2026_internship_rules:
+  start_date_window: ["2026-06-01", "2026-08-31"]
+  freshness_max_hours: 72
+  realistic_company_size: "<=200 employees preferred; YC / seed / Series A / Series B"
+  blocked_company_size: "Fortune 500, FAANG, banks, structured intern programs"
+  must_offer_immediate_start: true
+  honest_expectation: "1-3 viable postings per week, sometimes zero. Do not pad the digest."
+  auto_disable_date: "2026-07-15"
+
+fall_2026_internship_rules:
+  start_date_window: ["2026-08-15", "2026-09-15"]
+  location_required: "Boston, MA / Cambridge, MA / Greater Boston (commutable, hybrid OK)"
+  part_time_required: true
+  allowed_companies: "any size, but smaller startups often more flexible on hours"
+
+target_roles:
+  primary_cluster:
+    - "AI Engineer"
+    - "Applied AI Engineer"
+    - "Machine Learning Engineer"
+    - "ML Systems Engineer"
+    - "LLM Engineer"
+    - "Research Engineer (industry, no PhD required)"
+  secondary_cluster:
+    - "Software Engineer"
+    - "New Grad Software Engineer"
+    - "Backend Engineer"
+    - "Full Stack Engineer"
+    - "Startup Generalist / Founding Engineer"
+  opportunistic_cluster:
+    - "Forward Deployed Engineer"
+    - "Solutions Engineer"
+    - "Developer Tools Engineer"
+    - "AI Product Manager"
+    - "Infrastructure / Platform Engineer (new-grad only)"
+  occasional:
+    - "Data Scientist (ML/NLP-leaning only)"
+    - "Data Engineer (only if new-grad explicit)"
+    - "Technical Program Manager (new-grad programs only)"
+    - "Associate Product Manager (flagship programs only, ~5 total)"
+  blocked_titles:
+    - "Senior"
+    - "Staff"
+    - "Principal"
+    - "Lead"
+    - "Director"
+    - "Manager"
+    - "Sales"
+    - "Account Executive"
+    - "QA Tester"
+    - "Security Engineer"
+
+locations:
+  allowed_full_time:
+    - "Remote-US"
+    - "Boston, MA"
+    - "Cambridge, MA"
+    - "New York, NY"
+    - "San Francisco, CA"
+    - "Bay Area"
+    - "Seattle, WA"
+    - "Austin, TX"
+    - "Los Angeles, CA"
+    - "Chicago, IL"
+    - "Atlanta, GA"
+    - "Denver, CO"
+    - "Washington, DC"
+  allowed_internship_fall:
+    - "Boston, MA"
+    - "Cambridge, MA"
+    - "Greater Boston (within commute, hybrid OK)"
+  hard_no_locations:
+    - "Outside US"
+    - "EU-only"
+    - "UK-only"
+    - "Canada-only"
+
+compensation:
+  full_time_base_floor_usd: 120000
+  internship_hourly_floor_usd: 25
+
+company_priority_list:
+  ai_labs_and_top:
+    - "Anthropic"
+    - "OpenAI"
+    - "Google DeepMind"
+    - "Meta AI / FAIR"
+    - "Cohere"
+    - "Mistral"
+    - "Perplexity"
+    - "xAI"
+  ai_applied_startups:
+    - "Scale AI"
+    - "Cresta"
+    - "Decagon"
+    - "Sierra"
+    - "Adept"
+    - "Glean"
+    - "Cognition"
+    - "Harvey"
+    - "Hebbia"
+    - "LangChain"
+    - "Replit"
+    - "Cursor (Anysphere)"
+    - "Magic Dev"
+  big_tech:
+    - "Google"
+    - "Meta"
+    - "Microsoft"
+    - "Amazon"
+    - "Apple"
+    - "Nvidia"
+    - "Netflix"
+  infra_dev_tools:
+    - "Stripe"
+    - "Databricks"
+    - "Snowflake"
+    - "Datadog"
+    - "Cloudflare"
+    - "HashiCorp"
+    - "MongoDB"
+    - "Vercel"
+    - "Supabase"
+
+company_blocklist: []
+
+skill_weights:
+  highest:
+    - "LLM"
+    - "Agents"
+    - "Agentic AI"
+    - "Python"
+    - "Multi-agent"
+    - "LangChain / LangGraph"
+    - "RAG"
+    - "FastAPI"
+  high:
+    - "React"
+    - "TypeScript"
+    - "PyTorch"
+    - "Hugging Face"
+    - "Vector databases"
+    - "Distributed systems"
+  medium:
+    - "Node.js"
+    - "Django"
+    - "MongoDB / PostgreSQL"
+    - "AWS / Docker"
+    - "Computer vision"
+    - "NLP"
+  low:
+    - "C++"
+    - "Java"
+    - "HPC"
+
+application_capacity:
+  weekday_apps_target_min: 5
+  weekday_apps_target_max: 10
+  weekend_apps_target_max: 6
+  weekly_outreach_target_max: 25
+  hard_cap_per_day_total: 12
+
+quality_floors:
+  reject_below_score: 55
+  watchlist_below_score: 65
+  apply_no_tailor_score: 65
+  apply_light_tailor_score: 70
+  apply_full_tailor_score: 80

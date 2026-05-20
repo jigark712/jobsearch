@@ -1,0 +1,145 @@
+name: jobsearch
+
+on:
+  schedule:
+    # All times UTC. Boston ET = UTC-4 (DST) or UTC-5 (standard).
+    # We err on the EST side; jobs that need exact local time use 10:30 UTC ≈ 6:30 AM ET.
+    - cron: "10 */4 * * *"   # tier 1 ingestion every 4h, offset 10 min to avoid the top-of-hour rush
+    - cron: "30 10 * * *"    # daily digest 06:30 ET
+    - cron: "0 */2 * * *"    # gmail watcher every 2h
+    - cron: "0 */6 * * *"    # tier 2 (jobright/handshake/linkedin rss) every 6h
+    - cron: "30 */2 * * *"   # twitter watch every 2h, offset 30 min
+    - cron: "0 22 * * 0"     # weekly retro Sunday 18:00 ET
+  workflow_dispatch: {}      # let you trigger manually from the GitHub UI
+
+# Only one run at a time per job — avoid double-writing to the sheet.
+concurrency:
+  group: jobsearch
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore data cache (jobs, llm_cache, processed logs)
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/jobs
+            data/llm_cache.jsonl
+            data/processed_gmail.txt
+            data/processed_tweets.txt
+            data/twitter_llm_calls.txt
+          # New key each day so we have day-bounded JSONL files, but the cache
+          # restores yesterday's data so dedup works across runs.
+          key: jobsearch-data-${{ github.run_id }}
+          restore-keys: |
+            jobsearch-data-
+
+      - name: Hydrate secrets to disk
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GMAIL_OAUTH_CLIENT_JSON: ${{ secrets.GMAIL_OAUTH_CLIENT_JSON }}
+          GMAIL_OAUTH_TOKEN_JSON: ${{ secrets.GMAIL_OAUTH_TOKEN_JSON }}
+          HANDSHAKE_SESSION: ${{ secrets.HANDSHAKE_SESSION }}
+          JOBRIGHT_SESSION: ${{ secrets.JOBRIGHT_SESSION }}
+        run: |
+          mkdir -p .secrets
+          printf '%s' "$GOOGLE_SERVICE_ACCOUNT_JSON" > .secrets/google_service_account.json
+          printf '%s' "$GMAIL_OAUTH_CLIENT_JSON"     > .secrets/gmail_oauth_client.json
+          printf '%s' "$GMAIL_OAUTH_TOKEN_JSON"      > .secrets/gmail_oauth_token.json
+          [ -n "$HANDSHAKE_SESSION" ] && printf '%s' "$HANDSHAKE_SESSION" > .secrets/handshake_session.txt || true
+          [ -n "$JOBRIGHT_SESSION"  ] && printf '%s' "$JOBRIGHT_SESSION"  > .secrets/jobright_session.txt  || true
+
+      - name: Decide what to run from cron schedule
+        id: which
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          # If manually triggered, run everything once.
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            echo "tier1=true"   >> "$GITHUB_OUTPUT"
+            echo "tier2=true"   >> "$GITHUB_OUTPUT"
+            echo "twitter=true" >> "$GITHUB_OUTPUT"
+            echo "gmail=true"   >> "$GITHUB_OUTPUT"
+            echo "digest=true"  >> "$GITHUB_OUTPUT"
+            echo "retro=true"   >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          case "$SCHEDULE" in
+            "10 */4 * * *")  echo "tier1=true"   >> "$GITHUB_OUTPUT" ;;
+            "30 10 * * *")   echo "tier1=true"   >> "$GITHUB_OUTPUT"
+                             echo "tier2=true"   >> "$GITHUB_OUTPUT"
+                             echo "twitter=true" >> "$GITHUB_OUTPUT"
+                             echo "digest=true"  >> "$GITHUB_OUTPUT" ;;
+            "0 */2 * * *")   echo "gmail=true"   >> "$GITHUB_OUTPUT" ;;
+            "0 */6 * * *")   echo "tier2=true"   >> "$GITHUB_OUTPUT" ;;
+            "30 */2 * * *")  echo "twitter=true" >> "$GITHUB_OUTPUT" ;;
+            "0 22 * * 0")    echo "retro=true"   >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Tier 1 ingest
+        if: steps.which.outputs.tier1 == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/run_ingest_tier1.py
+
+      - name: Tier 2 ingest
+        if: steps.which.outputs.tier2 == 'true'
+        run: python scripts/run_ingest_tier2.py
+
+      - name: Twitter ingest
+        if: steps.which.outputs.twitter == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/run_ingest_twitter.py
+
+      - name: Gmail watcher
+        if: steps.which.outputs.gmail == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OWNER_EMAIL: ${{ secrets.OWNER_EMAIL }}
+          GOOGLE_APPLICATION_CREDENTIALS: ./.secrets/google_service_account.json
+          JOB_TRACKER_SHEET_ID: ${{ secrets.JOB_TRACKER_SHEET_ID }}
+        run: python scripts/run_gmail_watcher.py
+
+      - name: Daily digest
+        if: steps.which.outputs.digest == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OWNER_EMAIL: ${{ secrets.OWNER_EMAIL }}
+          DIGEST_FROM_EMAIL: ${{ secrets.OWNER_EMAIL }}
+          GOOGLE_APPLICATION_CREDENTIALS: ./.secrets/google_service_account.json
+          JOB_TRACKER_SHEET_ID: ${{ secrets.JOB_TRACKER_SHEET_ID }}
+        run: python scripts/run_digest.py
+
+      - name: Weekly retro
+        if: steps.which.outputs.retro == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OWNER_EMAIL: ${{ secrets.OWNER_EMAIL }}
+          GOOGLE_APPLICATION_CREDENTIALS: ./.secrets/google_service_account.json
+          JOB_TRACKER_SHEET_ID: ${{ secrets.JOB_TRACKER_SHEET_ID }}
+        run: python scripts/run_weekly_retro.py
+
+      - name: Upload digest as artifact (for inspection in case email fails)
+        if: steps.which.outputs.digest == 'true' || steps.which.outputs.retro == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ github.run_id }}
+          path: |
+            data/digests/
+            data/retros/
+          retention-days: 30
