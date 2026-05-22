@@ -1,0 +1,44 @@
+name: Internship Notifier
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'    # every 3 hours
+  workflow_dispatch: {}      # allow manual trigger for testing
+
+# Avoid two runs colliding (rare but the commit-back step would fight itself).
+concurrency:
+  group: internship-notifier
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write          # needed to commit seen_ids.json back
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: internship_notifier/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r internship_notifier/requirements.txt
+
+      - name: Run notifier
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python internship_notifier/notifier.py
+
+      - name: Commit updated seen_ids.json
+        run: |
+          git config user.name "internship-notifier[bot]"
+          git config user.email "notifier@noreply"
+          git add internship_notifier/data/seen_ids.json
+          git diff --staged --quiet || git commit -m "Update seen internship IDs [skip ci]"
+          git push
