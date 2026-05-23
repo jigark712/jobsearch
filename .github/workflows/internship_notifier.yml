@@ -2,7 +2,7 @@ name: Internship Notifier
 
 on:
   schedule:
-    - cron: '0 */3 * * *'    # every 3 hours
+    - cron: '*/5 * * * *'    # every 5 minutes (fastest GitHub Actions allows)
   workflow_dispatch: {}      # allow manual trigger for testing
 
 # Avoid two runs colliding (rare but the commit-back step would fight itself).
