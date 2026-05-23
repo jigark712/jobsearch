@@ -1,7 +1,7 @@
 """Main entrypoint for the internship notifier.
 
 Run directly: `python internship_notifier/notifier.py`
-Requires TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID env vars.
+Requires DISCORD_WEBHOOK_URL env var.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT.parent))
 
 from internship_notifier.filters import should_surface
 from internship_notifier.sources import simplify, wellfound, yc
-from internship_notifier.telegram_client import send_listing, send_text
+from internship_notifier.discord_client import send_listing, send_text
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
@@ -80,7 +80,7 @@ def main() -> int:
     is_first_run = len(seen) == 0
     if is_first_run and len(new_listings) > FIRST_RUN_BACKFILL_THRESHOLD:
         log.warning(
-            "first run with %d listings; backfilling seen_ids silently to avoid Telegram spam. "
+            "first run with %d listings; backfilling seen_ids silently to avoid Discord spam. "
             "Future runs will only notify on genuinely new postings.",
             len(new_listings)
         )
@@ -104,12 +104,12 @@ def main() -> int:
             seen.add(listing["id"])
             sent += 1
         else:
-            log.warning("telegram send failed for %s; will retry next run", listing["id"])
+            log.warning("discord send failed for %s; will retry next run", listing["id"])
 
     if overflow > 0 and sent > 0:
         send_text(
-            f"... and {overflow} more new listings. "
-            f"Check the full list: {OVERFLOW_SOURCE_URL}"
+            f"...and {overflow} more new listings this run. "
+            f"Full list: <{OVERFLOW_SOURCE_URL}>"
         )
 
     save_seen_ids(seen)

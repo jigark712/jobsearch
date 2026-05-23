@@ -2,45 +2,36 @@
 
 ## 1. What this does
 
-A self-contained Python module that watches three job sources every 3 hours and pushes Telegram messages whenever a new summer 2026 AI/ML/SWE internship that's realistic for F-1 students gets posted. It deduplicates against a committed JSON file in this repo, so you never get the same listing twice across runs. It runs on GitHub Actions free tier with no server or database.
+A self-contained Python module that watches three job sources every 3 hours and posts to a Discord channel whenever a new summer 2026 AI/ML/SWE internship that's realistic for F-1 students gets posted. It deduplicates against a committed JSON file in this repo, so you never get the same listing twice across runs. It runs on GitHub Actions free tier with no server or database.
 
 ## 2. One-time setup
 
-### Step 1: Create the Telegram bot
+### Step 1: Create a Discord webhook
 
-- Open Telegram and message **@BotFather**
-- Send `/newbot`
-- Follow prompts, give it any display name and any unique username (ending in `_bot`)
-- Copy the API token BotFather gives you (looks like `1234567890:ABCDEFghijklmno...`)
+- Open Discord (desktop or https://discord.com/app)
+- Create a server if you don't have one (`+` button in left sidebar → Create My Own → For me and my friends)
+- Create a text channel (e.g. `#internships`)
+- Right-click the channel → **Edit Channel** → **Integrations** → **Webhooks** → **Create Webhook**
+- (Optional) name the webhook `Internship Notifier`
+- Click **Copy Webhook URL** — looks like `https://discord.com/api/webhooks/12345/abcXYZ...`
 
-### Step 2: Get your Telegram chat ID
-
-- Message your new bot once (send it anything — a `hi` works)
-- Open this URL in your browser (replace `TOKEN`):
-  ```
-  https://api.telegram.org/bot{TOKEN}/getUpdates
-  ```
-- Find `"chat": {"id": XXXXXXXXX}` in the JSON response
-- That number is your chat ID
-
-### Step 3: Add GitHub secrets
+### Step 2: Add GitHub secret
 
 In your GitHub repo:
 - Go to **Settings → Secrets and variables → Actions**
-- Add two repository secrets:
-  - `TELEGRAM_BOT_TOKEN` — the token from Step 1
-  - `TELEGRAM_CHAT_ID` — the number from Step 2
+- Add one repository secret:
+  - `DISCORD_WEBHOOK_URL` — the URL from Step 1
 
-### Step 4: Initialize seen_ids.json
+### Step 3: Initialize seen_ids.json
 
 Already done — `internship_notifier/data/seen_ids.json` exists with `[]`. Just commit + push.
 
-### Step 5: Test manually
+### Step 4: Test manually
 
 - Go to the **Actions** tab in GitHub
 - Find the **"Internship Notifier"** workflow
 - Click **Run workflow** → confirm
-- Check your Telegram within 2 minutes — first run will likely send a batch (up to 10 listings)
+- Check your Discord channel within 2 minutes — first run will silently mark old listings as seen and post a single "✅ Internship notifier is live" confirmation (backfill protection). Future runs will alert on genuinely new postings only.
 
 ## 3. Filters
 
@@ -89,7 +80,6 @@ Case-insensitive substring match.
 ```bash
 cd /path/to/repo
 pip install -r internship_notifier/requirements.txt
-export TELEGRAM_BOT_TOKEN=...
-export TELEGRAM_CHAT_ID=...
+export DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/...'
 python internship_notifier/notifier.py
 ```
