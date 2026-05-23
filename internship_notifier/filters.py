@@ -59,6 +59,26 @@ REJECT_TITLE_KEYWORDS = [
 # notifications from specific employers. Empty by default.
 REJECT_COMPANIES: list[str] = []
 
+# Drop any listing whose location matches one of these (case-insensitive substring).
+# Owner is F-1 with CPT for the US — non-US listings are noise.
+REJECT_LOCATION_SUBSTRINGS = [
+    "canada", "ontario", "toronto", "montreal", "vancouver", "kitchener",
+    "ottawa", "calgary", "waterloo", ", on", ", bc", ", qc", ", ab",
+    "united kingdom", "uk", "london, england", "england",
+    "ireland", "dublin",
+    "germany", "berlin", "munich",
+    "france", "paris",
+    "netherlands", "amsterdam",
+    "india", "bangalore", "mumbai", "delhi", "hyderabad", "pune", "chennai",
+    "singapore", "japan", "tokyo", "korea", "seoul",
+    "australia", "sydney", "melbourne",
+    "brazil", "mexico",
+    "spain", "madrid", "barcelona",
+    "switzerland", "zurich",
+    "remote - canada", "remote-canada", "remote (canada)",
+    "emea", "apac",
+]
+
 
 def passes_category(listing: dict) -> bool:
     if listing.get("source") != "simplify":
@@ -86,6 +106,9 @@ def is_rejected(listing: dict) -> bool:
         return True
     company_lower = (listing.get("company") or "").lower()
     if any(c.lower() in company_lower for c in REJECT_COMPANIES):
+        return True
+    location_lower = (listing.get("location") or "").lower()
+    if location_lower and any(s in location_lower for s in REJECT_LOCATION_SUBSTRINGS):
         return True
     return False
 
